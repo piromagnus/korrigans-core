@@ -79,9 +79,9 @@ skills           = "to check"
 verified         = false
 
 [pi-durable]
-subscription     = "ChatGPT subscription (pi durable runtime)"
-interactive      = ["pi", "--append-system-prompt", "{role_file}"]
-run              = ["pi", "--print", "--model", "{model}", "--thinking", "{effort}", "{prompt}"]
+subscription     = "ChatGPT subscription (pi durable session & extensions)"
+interactive      = ["pi", "--session-dir", "{workspace}/state/pi-durable", "--session-id", "{task_id}", "--append-system-prompt", "{role_file}"]
+run              = ["pi", "--print", "--session-dir", "{workspace}/state/pi-durable", "--session-id", "{task_id}", "--model", "{model}", "--thinking", "{effort}", "{prompt}"]
 models           = { standard = "openai-codex/gpt-6.1-sol", strong = "openai-codex/gpt-6.1-sol", fast = "openai-codex/gpt-6-luna" }
 quota_patterns   = ["usage limit", "rate limit"]
 reads_agents_md  = "native (AGENTS.md and CLAUDE.md)"

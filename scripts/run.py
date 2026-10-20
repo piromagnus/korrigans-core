@@ -333,7 +333,7 @@ def main():
         outcome = None
         for position, name in enumerate(names):
             harness = harnesses[name] | {"name": name}
-            values = {"prompt": prompt, "role_text": prompt, "role_file": role_file, "workspace": common.WS}
+            values = {"prompt": prompt, "role_text": prompt, "role_file": role_file, "workspace": common.WS, "task_id": ident}
             command = harness_command(harness, rk, r, values)
             if harness.get("extra_dir_option"):
                 for path, _mode in access:
