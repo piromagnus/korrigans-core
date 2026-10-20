@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 use std::env;
 use std::fs::{self, File};
-use std::io::{self, Read};
+use std::io::{self, Read, Write};
 use std::path::{Path, PathBuf};
 use std::time::UNIX_EPOCH;
 
@@ -184,6 +184,20 @@ impl Frontmatter {
     }
 }
 
+fn strip_quotes(val: &str) -> &str {
+    if (val.starts_with('"') && val.ends_with('"'))
+        || (val.starts_with('\'') && val.ends_with('\''))
+    {
+        if val.len() >= 2 {
+            &val[1..val.len() - 1]
+        } else {
+            val
+        }
+    } else {
+        val
+    }
+}
+
 fn parse_frontmatter(content: &str) -> Option<Frontmatter> {
     let trimmed = content.trim_start();
     if !trimmed.starts_with("---") {
@@ -193,32 +207,37 @@ fn parse_frontmatter(content: &str) -> Option<Frontmatter> {
     let end_idx = after_start.find("\n---")?;
     let fm_text = &after_start[..end_idx];
 
-    let mut fields = BTreeMap::new();
+    let mut fields: BTreeMap<String, String> = BTreeMap::new();
+    let mut current_key: Option<String> = None;
     for line in fm_text.lines() {
         let l = line.trim();
         if l.is_empty() || l.starts_with('#') {
             continue;
         }
+        let is_indented = line.starts_with(' ') || line.starts_with('\t');
+        if is_indented || l.starts_with("- ") || l == "-" {
+            if let Some(ref k) = current_key {
+                let item = l.strip_prefix("-").unwrap_or(l).trim();
+                let item_clean = strip_quotes(item);
+                if !item_clean.is_empty() {
+                    let entry = fields.entry(k.clone()).or_default();
+                    if !entry.is_empty() {
+                        entry.push_str(", ");
+                    }
+                    entry.push_str(item_clean);
+                }
+            }
+            continue;
+        }
         if let Some((k, v)) = l.split_once(':') {
             let key = k.trim().to_string();
             let mut val = v.trim();
-            // Strip trailing comments
             if let Some((clean_val, _)) = val.split_once(" #") {
                 val = clean_val.trim();
             }
-            // Strip quotes
-            let val_str = if (val.starts_with('"') && val.ends_with('"'))
-                || (val.starts_with('\'') && val.ends_with('\''))
-            {
-                if val.len() >= 2 {
-                    &val[1..val.len() - 1]
-                } else {
-                    val
-                }
-            } else {
-                val
-            };
-            fields.insert(key, val_str.to_string());
+            let val_str = strip_quotes(val);
+            fields.insert(key.clone(), val_str.to_string());
+            current_key = Some(key);
         }
     }
     Some(Frontmatter { fields })
@@ -315,7 +334,7 @@ fn escape_json(s: &str) -> String {
 fn run_tasks(workspace: &Path) -> io::Result<()> {
     let tasks_dir = workspace.join("tasks");
     if !tasks_dir.is_dir() {
-        println!("[]");
+        let _ = writeln!(io::stdout(), "[]");
         return Ok(());
     }
 
@@ -454,7 +473,7 @@ fn run_tasks(workspace: &Path) -> io::Result<()> {
         json_items.push(item);
     }
 
-    println!("[{}]", json_items.join(",\n"));
+    let _ = writeln!(io::stdout(), "[{}]", json_items.join(",\n"));
     Ok(())
 }
 
@@ -621,7 +640,8 @@ fn run_scan(workspace: &Path, core: Option<&Path>) -> io::Result<()> {
         .map(|c| format!("\"{}\"", escape_json(&c.to_string_lossy())))
         .unwrap_or_else(|| "null".to_string());
 
-    println!(
+    let _ = writeln!(
+        io::stdout(),
         concat!(
             "{{",
             "\"workspace\":\"{}\",",
