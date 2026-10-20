@@ -65,6 +65,32 @@ else
   ok "core cloned from $REPO into $CORE"
 fi
 
+# Native Rust engine compilation if cargo is available
+if [ -f "$CORE/engine/Cargo.toml" ]; then
+  CARGO_CMD=""
+  if command -v cargo >/dev/null 2>&1; then
+    CARGO_CMD="cargo"
+  elif [ -x "$HOME/.cargo/bin/cargo" ]; then
+    CARGO_CMD="$HOME/.cargo/bin/cargo"
+  fi
+  if [ -n "$CARGO_CMD" ]; then
+    if [ "$DRY" = 1 ]; then
+      echo "  would build native engine: $CARGO_CMD build --release --manifest-path $CORE/engine/Cargo.toml"
+    else
+      if "$CARGO_CMD" build --release --manifest-path "$CORE/engine/Cargo.toml" -q; then
+        mkdir -p "$CORE/bin"
+        cp "$CORE/engine/target/release/korrigans-engine" "$CORE/bin/korrigans-engine"
+        chmod +x "$CORE/bin/korrigans-engine"
+        ok "native engine compiled and installed (bin/korrigans-engine)"
+      else
+        todo "cargo build failed: fallback to Python engine will be used"
+      fi
+    fi
+  else
+    todo "cargo not found: native engine skipped (Python fallback will be used)"
+  fi
+fi
+
 echo "3. Workspace"
 if [ -f "$WS/korrigans.toml" ]; then
   ok "workspace already at $WS: existing files are kept"

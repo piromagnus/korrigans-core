@@ -55,10 +55,24 @@ of the previous attempt. Climbing past another difficulty's start reclassifies t
 
 Ranks, models per harness, the Watch and time limits are all in `rules/escalation.toml`.
 
+## Hybrid Architecture: Python + Native Rust Engine
+
+Korrigans combines Python for agent orchestration with a high-performance native Rust engine (`engine/`):
+- **Native Engine (`engine/` -> `bin/korrigans-engine`)**: Fast recursive workspace traversal, YAML frontmatter parsing, SHA-256 fingerprinting, and task scoring.
+- **Transparent Fallback**: If Cargo or Rust is not present, `scripts/engine.py` provides a pure Python fallback.
+- **Unified Engine API**: The `korrigans engine` CLI exposes `scan`, `tasks`, `status`, and `module` commands in structured JSON.
+
+## Harnesses and pi-durable
+
+Korrigans drives standard coding agents: Claude Code, Codex, pi, Hermes, Cursor, and Mistral Vibe.
+For headless, long-running tasks, Korrigans includes the `pi-durable` harness:
+- Dedicated, durable task session directories (`state/sessions/<task_id>/`).
+- Crash resilience, automatic process tracking, and clean resumption across escalation ladder attempts.
+
 ## Install
 
 Requirements: Linux or macOS, git, Python 3.10 or later, and at least one coding agent (Claude Code, Codex,
-pi or Hermes).
+pi or Hermes). Rust / Cargo is optional: if installed, `install.sh` automatically compiles the native engine (`bin/korrigans-engine`).
 
 ```bash
 git clone https://github.com/piromagnus/korrigans-core.git ~/.local/share/korrigans-core

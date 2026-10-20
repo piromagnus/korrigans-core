@@ -3,3 +3,5 @@ __pycache__/
 .pytest_cache/
 engine/target/
 bin/korrigans-engine
+.env
+.DS_Store
