@@ -1,0 +1,7 @@
+# Extensions of the module research, merged into the workspace's registry by `korrigans generate --check`.
+
+[find-sources]
+form = "skill"
+status = "active"
+origin = "research"
+summary = "Find sources from the library first, then the web if allowed; record every source used."

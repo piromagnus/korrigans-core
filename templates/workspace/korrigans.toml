@@ -1,0 +1,17 @@
+# Your Korrigans workspace. This file marks the folder as a workspace; the scripts read it at each run.
+# The Vigil (onboarding) fills it with you and removes each "(vigil: ...)" mark once settled. Edit freely, then run `korrigans generate`.
+
+[korrigans]
+core = "~/.local/share/korrigans"   # where the core is installed (install.sh writes the real path)
+language = "en"                     # the language your agents use with you: en, fr, es, de, it, ... (vigil: name)
+user = "people/me.md"               # your own person note
+modules = []                        # optional modules: "quota", "todoist", "mail", "research" (vigil: tools)
+link_root = "."                     # folder that [[wiki links]] are relative to (your Obsidian vault root)
+
+# Module settings, used only when the module is enabled.
+[todoist]
+project = "Korrigans"               # the task-manager project the household writes to
+read_only = []                      # your own projects: read, never moved or deleted
+
+[research]
+library = "library"                 # your knowledge base (papers, notes), relative to the workspace or absolute

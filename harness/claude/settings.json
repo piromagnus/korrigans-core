@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push origin main:*)",
+      "Bash(himalaya message send:*)",
+      "Bash(himalaya template send:*)",
+      "Read(./.env)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [ { "type": "command", "command": "korrigans journal hook" } ] }
+    ],
+    "Stop": [
+      { "hooks": [ { "type": "command", "command": "korrigans journal hook" } ] }
+    ],
+    "SubagentStop": [
+      { "hooks": [ { "type": "command", "command": "korrigans journal hook" } ] }
+    ]
+  }
+}

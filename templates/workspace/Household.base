@@ -1,0 +1,140 @@
+filters:
+  and:
+    - file.ext == "md"
+    - '!file.inFolder("templates")'
+    - '!file.inFolder("agents/commanders/_template")'
+formulas:
+  note_link: file.asLink(note.title)
+properties:
+  formula.note_link:
+    displayName: Note
+  note.status:
+    displayName: Status
+  note.intensity:
+    displayName: Intensity
+  note.due:
+    displayName: Due
+  note.project:
+    displayName: Project
+  note.waiting_on:
+    displayName: Reason
+  note.assigned_to:
+    displayName: Assigned to
+  note.owner:
+    displayName: Owner
+  note.cost:
+    displayName: Cost
+  note.blocking:
+    displayName: Blocking
+  note.display_name:
+    displayName: Name
+  note.mode:
+    displayName: Mode
+  note.personality:
+    displayName: Personality
+  note.model:
+    displayName: Model
+views:
+  - type: table
+    name: Projects
+    filters:
+      and:
+        - note.type == "project"
+    groupBy:
+      property: intensity
+      direction: ASC
+    order:
+      - formula.note_link
+      - status
+      - due
+  - type: table
+    name: Waiting on you
+    filters:
+      and:
+        - note.type == "task"
+        - note.status == "waiting-on-you"
+    order:
+      - formula.note_link
+      - waiting_on
+      - project
+  - type: table
+    name: To review
+    filters:
+      and:
+        - note.type == "task"
+        - note.status == "to-review"
+    order:
+      - formula.note_link
+      - project
+      - assigned_to
+  - type: table
+    name: Active tasks
+    filters:
+      and:
+        - note.type == "task"
+        - note.status != "done"
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - formula.note_link
+      - project
+      - owner
+      - assigned_to
+  - type: table
+    name: Backlog
+    filters:
+      or:
+        - note.type == "idea" && note.status == "accepted"
+        - note.type == "task" && note.when == "quota-free" && note.status == "todo"
+    order:
+      - formula.note_link
+      - project
+      - cost
+      - preferred_harness
+  - type: table
+    name: Ideas
+    filters:
+      and:
+        - note.type == "idea"
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - formula.note_link
+      - project
+      - cost
+  - type: table
+    name: Requests
+    filters:
+      and:
+        - note.type == "question"
+        - note.status != "closed"
+    groupBy:
+      property: blocking
+      direction: DESC
+    order:
+      - formula.note_link
+      - project
+      - assumption
+  - type: table
+    name: People
+    filters:
+      and:
+        - note.type == "person"
+    order:
+      - formula.note_link
+      - role
+      - agent_contact
+  - type: table
+    name: Agents
+    filters:
+      and:
+        - note.type == "agent"
+    order:
+      - file.folder
+      - display_name
+      - mode
+      - project
+      - personality
+      - model

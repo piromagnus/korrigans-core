@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Fake codex for tests: reads the model and effort, behaves according to FAKE_SCENARIO
+# (fail, loop, stop, or anything else = success). Short calls (Constable, Watch) go to the fake pi.
+for a in "$@"; do
+  case "$a" in *"Answer with a single JSON object:"*|*"Rate the difficulty of this task."*) exec "$(dirname "$0")/pi" "$@";; esac
+done
+model=""; effort=""; prompt=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -m) model=$2; shift;;
+    -c) effort=${2#model_reasoning_effort=}; shift;;
+    exec|--full-auto|--add-dir) [ "$1" = --add-dir ] && shift;;
+    *) prompt=$1;;
+  esac
+  shift
+done
+echo "fake codex: $model effort $effort"
+folder=$(printf '%s\n' "$prompt" | sed -n 's/^Task folder (charter, card, evidence): //p' | head -1)
+[ -n "$folder" ] && echo "- $(date +%H:%M): start $model: in progress; next: read the charter" >> "$folder/progress.md"
+case "${FAKE_SCENARIO:-}:$model:$effort" in
+  fail:gpt-6-luna:medium) echo "error: I cannot do it"; exit 1;;
+  loop:gpt-6.1-sol:medium) for i in $(seq 1 40); do echo "same error TypeError line 12 ($i)"; sleep 0.2; done; exit 0;;
+  stop:*) for i in $(seq 1 40); do echo "writing into /etc ($i)"; sleep 0.2; done; exit 0;;
+  *) echo "work done"; touch "$PWD/done-$model-$effort"; exit 0;;
+esac

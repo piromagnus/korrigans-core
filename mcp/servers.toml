@@ -1,0 +1,12 @@
+# MCP servers, in a neutral form. `korrigans generate` writes them in each harness's format:
+# .mcp.json (Claude Code), .pi/mcp.json (pi), .codex/config.toml (Codex), state/hermes.yaml (Hermes).
+# This file is merged across layers: the core (empty), each enabled module (the todoist module adds its
+# server), then mcp/servers.toml in your workspace.
+# Adding a server goes through the extensions cycle (extensions/registry.toml), then `korrigans generate`.
+#
+# A server is a table with either a `url` (remote, HTTP) or a `command` and its `args` (local):
+#
+# [qmd]
+# command = "qmd"
+# args = ["mcp"]
+# description = "Local full-text search in the workspace and your notes (https://github.com/tobi/qmd)"

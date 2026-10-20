@@ -1,0 +1,50 @@
+# Subscriptions and quota windows. `korrigans usage` uses them to tell the Seneschal when a subscription
+# is under-used before its reset, so the backlog can use what is already paid for (skill propose-backlog).
+# Copy the examples you need into rules/subscriptions.toml in your workspace, then fix the reset times:
+# your file is merged on top of this one.
+#
+# window : "week" or "month".
+# reset  : "monday 00:00" (week: an English weekday and a local time) or "1 00:00" (month: day and time).
+# assumed: true until you have checked the reset time; a measured reset replaces it.
+# harness: the harness names (harness/harness.toml) that spend this subscription.
+# measure: where the usage comes from.
+#   claude-statusline : written by `korrigans usage statusline` (Claude Code's status line)
+#   codex-sessions    : limits read in ~/.codex/sessions/
+#   journal           : estimate from the number of runs in the window / run_cap
+#   manual            : a value you set with `korrigans usage set <subscription> <percent>`
+# Whatever the measure, a value set by hand in the current window is used when no measure is found,
+# then the journal estimate if run_cap is set.
+
+[default]
+threshold = 0.70     # under 70 % used...
+warn_hours = 48      # ...less than 48 h before the reset: use it before it is lost
+
+# [claude]
+# harness = ["claude"]
+# window = "week"
+# reset = "monday 00:00"
+# assumed = true
+# measure = "claude-statusline"
+
+# [chatgpt]
+# harness = ["codex", "pi"]
+# window = "week"
+# reset = "monday 00:00"
+# assumed = true
+# measure = "codex-sessions"
+# run_cap = 40
+
+# [cursor]
+# harness = ["cursor"]
+# window = "month"
+# reset = "1 00:00"
+# assumed = true
+# measure = "journal"
+# run_cap = 60
+
+# [mistral]
+# harness = ["vibe"]
+# window = "month"
+# reset = "1 00:00"
+# assumed = true
+# measure = "manual"

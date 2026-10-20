@@ -1,0 +1,5 @@
+name = "todoist"
+summary = "Mirror the household's tasks in a Todoist project, next to the user's own projects, which stay read-only."
+requires = ["TODOIST_API_TOKEN"]    # in the workspace's .env (git-ignored), for `korrigans todoist`
+settings = ["todoist.project", "todoist.read_only"]
+commands = ["korrigans todoist today|read [\"Project\"]|apply <assignment.md> [--execute]"]

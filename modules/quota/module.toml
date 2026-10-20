@@ -1,0 +1,5 @@
+name = "quota"
+summary = "Track subscription usage and warn when a quota will be lost at its reset, so the backlog can use it."
+requires = []                       # optional: Claude Code status line, Codex session files
+settings = []                       # korrigans.toml keys read: none (rules/subscriptions.toml instead)
+commands = ["korrigans usage state|alert|set <subscription> <percent>|statusline"]

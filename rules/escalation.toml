@@ -1,0 +1,74 @@
+# Model escalation. Override any key in your workspace's rules/escalation.toml.
+#
+# One ladder of ranks, from the cheapest model to the strongest. A task's difficulty only says on which
+# rank it starts. When an attempt fails (error, the charter's `verify` command failing, time limit
+# passed, the Watch saying "escalate"), the next rank takes over with a summary of the attempts
+# (tasks/<id>/attempts.md). Climbing past the start of a higher difficulty reclassifies the task: an
+# "easy" task that only succeeds at knight becomes "medium" in its charter and in the journal.
+# After `max_attempts` ranks, the task becomes waiting-on-you.
+#
+# Rising in rank is an honour, not a punishment. See the ladder with: korrigans ladder show --difficulty easy
+# Choose the model behind each rank by price and quality, for example from a public leaderboard.
+
+ladder = ["page", "squire", "knight", "banneret", "paladin", "champion", "grandmaster"]
+
+# Ranks tried at most in one run (protects the quota).
+max_attempts = 4
+
+# Rank -> "model:effort". The model is a short name from [models]. Efforts: low, medium, high, xhigh, max.
+[ranks]
+page        = "small:medium"
+squire      = "small:high"
+knight      = "mid:medium"
+banneret    = "mid:high"
+paladin     = "large:high"
+champion    = "large:xhigh"
+grandmaster = "large:max"
+
+# What each difficulty means; the Constable reads these lines.
+[difficulties]
+easy   = "Small local change: an interface element, a rename, a short script, a figure."
+medium = "Rework of a part, a new function with its tests, a change across several files."
+hard   = "Real thinking needed: design, a bug of unknown cause, an algorithm, an evaluation protocol."
+
+# Starting rank for each difficulty.
+[start]
+easy   = "page"
+medium = "knight"
+hard   = "banneret"
+
+# Time limit of one attempt, in minutes (0 = none), by the difficulty level of the rank.
+[max_minutes]
+easy   = 20
+medium = 60
+hard   = 120
+
+# Short model names -> model id in each harness. A harness missing from a line is not used for that model.
+[models]
+small = { codex = "gpt-6-luna", pi = "openai-codex/gpt-6-luna", pi-durable = "openai-codex/gpt-6-luna", hermes = "gpt-6-luna", claude = "haiku" }
+mid   = { codex = "gpt-6.1-sol", pi = "openai-codex/gpt-6.1-sol", pi-durable = "openai-codex/gpt-6.1-sol", hermes = "gpt-6.1-sol", claude = "sonnet" }
+large = { claude = "opus", pi = "openai-codex/gpt-6.1-sol", pi-durable = "openai-codex/gpt-6.1-sol" }
+
+# Difficulty of a charter without a `difficulty` field: these rules first, then the Constable
+# (a short call at `rank`), then the default.
+[classify]
+by_cost = { S = "easy", M = "medium", L = "hard" }
+by_type = { proofreading = "easy", admin = "easy", mail = "easy" }
+rank    = "page"
+default = "medium"
+
+# The Watch: a model stronger than the korrigan that checks the run is heading the right way. It gets
+# progress.md, the changed files, repeated lines and the end of the trace, not the whole conversation.
+# It is called only when something moved, or after `silence_minutes` of silence.
+[watch]
+active  = { easy = false, medium = true, hard = true }   # by the difficulty level of the current rank
+gap     = 2              # the Watch is two ranks above the korrigan...
+minimum = "banneret"     # ...and never below this rank
+every_minutes   = 5
+silence_minutes = 15
+lines = 40               # lines of the end of the trace it reads
+
+# Short calls (Constable, Watch): the first harness of this list that has the rank's model, and a time limit.
+[short_calls]
+harness = ["pi", "codex", "claude"]
+timeout_seconds = 120

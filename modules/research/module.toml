@@ -1,0 +1,5 @@
+name = "research"
+summary = "Blondel finds sources, starting from the user's library, records each one, and brings stable results back to the library once sealed."
+requires = []                       # optional: qmd (https://github.com/tobi/qmd) for `korrigans index`
+settings = ["research.library"]     # the library folder, relative to the workspace or absolute; default "library"
+commands = ["korrigans index"]

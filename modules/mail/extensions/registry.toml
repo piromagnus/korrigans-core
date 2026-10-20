@@ -1,0 +1,7 @@
+# Extensions of the module mail, merged into the workspace's registry by `korrigans generate --check`.
+
+[sort-mail]
+form = "skill"
+status = "active"
+origin = "mail"
+summary = "Sort the mail since the last run and write the mail summary for the Seneschal."

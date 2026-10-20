@@ -1,0 +1,5 @@
+name = "mail"
+summary = "The Chamberlain sorts the user's mail every morning, read only, and reports what needs attention. Never sends, never deletes."
+requires = []                       # local mailboxes in mbox format (Thunderbird by default)
+settings = ["mail.mailboxes"]       # optional glob patterns of mbox files; default: Thunderbird's inboxes
+commands = ["korrigans mail [--since ISO]"]

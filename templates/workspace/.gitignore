@@ -1,0 +1,18 @@
+# Secrets: never versioned, never read by agents (they only check the file exists).
+.env
+# Derived state, rebuilt at any time.
+state/
+Board.md
+Watchtower.md
+tasks/*/trace-*.log
+tasks/*/prompt.md
+tasks/*/.*-prompt.md
+# Generated harness adapters (korrigans generate).
+CLAUDE.md
+.claude/
+.mcp.json
+.pi/
+.codex/
+.agents/
+# Large or binary files belong in your data folders, not here.
+*.pdf

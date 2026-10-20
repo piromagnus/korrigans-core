@@ -61,8 +61,8 @@ Requirements: Linux or macOS, git, Python 3.10 or later, and at least one coding
 pi or Hermes).
 
 ```bash
-git clone https://github.com/korrigans-hq/korrigans.git ~/.local/share/korrigans
-bash ~/.local/share/korrigans/install.sh
+git clone https://github.com/piromagnus/korrigans-core.git ~/.local/share/korrigans-core
+bash ~/.local/share/korrigans-core/install.sh
 ```
 
 The installer is safe to run again. It:
@@ -97,6 +97,12 @@ korrigans board                               # what waits for you, what runs, w
 korrigans daily                               # the Morning Chronicle (also from a systemd timer or cron)
 korrigans help                                # every command
 ```
+
+## Resources and compact projects
+
+Dataset, repository and tool notes live in the workspace's `resources/` (`datasets/`, `repos/`, `tools/`), indexed by `resources/README.md`. Each describes observed paths, formats, metadata, folder layout and where to look next; it grants no access. `projects/<slug>/project.md` stays short and links to these notes.
+
+Skills: `create-resource` (`templates/resource.md`), `create-project-note` (`templates/project.md`), `maintain-resources` (weekly and after known changes, by maintenance or the Chronicler). Reusable examples remain in the separate `resources/catalog.md`.
 
 ## Core and workspace
 

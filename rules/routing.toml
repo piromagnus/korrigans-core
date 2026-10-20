@@ -1,0 +1,29 @@
+# Which harness runs what. Override any key in your workspace's rules/routing.toml.
+# The commands of each harness are in harness/harness.toml.
+
+# Harness order by task type. korrigans run tries the next one when the previous reports an exhausted
+# quota, and stops on any other error. Never a fallback to pay-as-you-go.
+[types]
+code         = ["codex", "claude", "cursor"]
+research     = ["claude", "codex"]
+writing      = ["claude", "codex"]
+proofreading = ["claude", "codex"]
+admin        = ["claude", "codex"]
+mail         = ["claude"]
+request      = ["claude", "codex"]
+
+# Default harness of each session agent (korrigans launch).
+[sessions]
+seneschal = "claude"
+commander = "claude"
+
+# Default working folder of a task type, when the charter has no `workdir` (else the workspace).
+# Example: research = "~/notes"
+[workdirs]
+
+# The Morning Chronicle (korrigans daily): harness, and optionally model and effort for its agents.
+# Empty model = the harness's `standard` model; empty effort = "high".
+[daily]
+harness = "claude"
+model = ""
+effort = ""

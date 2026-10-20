@@ -1,0 +1,13 @@
+# The Morning Chronicle as a systemd user service. Copy to ~/.config/systemd/user/, set the workspace path,
+# then: systemctl --user daemon-reload && systemctl --user enable --now korrigans-daily.timer
+[Unit]
+Description=Korrigans: the Morning Chronicle
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+Environment=KORRIGANS_WORKSPACE=%h/korrigans
+WorkingDirectory=%h/korrigans
+ExecStart=%h/.local/bin/korrigans daily
+TimeoutStartSec=1800

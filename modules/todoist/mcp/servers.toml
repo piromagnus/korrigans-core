@@ -1,0 +1,6 @@
+# The official Todoist MCP server (Doist, OAuth at first use). Merged with the core's and the workspace's
+# mcp/servers.toml by `korrigans generate`.
+
+[todoist]
+url = "https://ai.todoist.net/mcp"
+description = "Tasks of the household's Todoist project (official Doist server, OAuth)"

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Korrigans command line. install.sh copies this file to ~/.local/bin/korrigans with the paths filled in.
+KORRIGANS_CORE="${KORRIGANS_CORE:-$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)}"
+export KORRIGANS_CORE
+exec python3 "$KORRIGANS_CORE/scripts/cli.py" "$@"

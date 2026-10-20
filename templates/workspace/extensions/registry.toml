@@ -1,0 +1,4 @@
+# Your extensions, merged with the core's and the enabled modules' (korrigans generate --check).
+# form: skill, script, mcp, plugin ; status: proposed, testing, active, refused ;
+# origin: internal (written here), or a URL (third-party code: approved_by = "user", always after your approval).
+# An extension that lives elsewhere gets `location = "<path relative to the workspace>"`.

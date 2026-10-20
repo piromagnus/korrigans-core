@@ -1,0 +1,41 @@
+# Relations between typed notes. `korrigans check` loads this file (simple YAML: keep this layout).
+# A relation is carried by the subject note; each value is a list of links "[[path/to/note]]", relative to
+# the link root of korrigans.toml. Override it with rules/relations.yaml in your workspace.
+# Workspace types: project, task, idea, person, question.
+# External types live outside the workspace, in a knowledge base or library: paper, concept, claim,
+# experiment. They are optional: a note of those types is only needed if you link to one. Their type is read
+# from the target note's frontmatter. A research module or your own library may define more; declare them here.
+version: 1
+relations:
+  rel_part_of:
+    meaning: "The note is part of the linked project (or the sub-project of the parent project)."
+    subject_types: [task, idea, project]
+    object_types: [project]
+  rel_uses:
+    meaning: "The project, task or idea uses the linked method, concept or paper."
+    subject_types: [project, task, idea]
+    object_types: [concept, paper]
+  rel_builds_on:
+    meaning: "Builds on the linked paper or claim (starting point, reference)."
+    subject_types: [project, idea]
+    object_types: [paper, claim]
+  rel_tests:
+    meaning: "The idea or task tests the linked claim or concept."
+    subject_types: [idea, task]
+    object_types: [claim, concept]
+  rel_produces:
+    meaning: "The idea or task produced the linked experiment or claim in the library."
+    subject_types: [idea, task]
+    object_types: [experiment, claim]
+  rel_depends_on:
+    meaning: "Cannot move forward without the linked project or task."
+    subject_types: [project, task]
+    object_types: [project, task]
+  rel_involves:
+    meaning: "The linked person takes part in the project or task."
+    subject_types: [project, task]
+    object_types: [person]
+  rel_related_to:
+    meaning: "Navigation link, with no claim; say why in one sentence in the note."
+    subject_types: [project, task, idea, person]
+    object_types: [project, task, idea, person, paper, concept, claim, experiment]

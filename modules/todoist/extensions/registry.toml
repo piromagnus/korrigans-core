@@ -1,0 +1,13 @@
+# Extensions of the module todoist, merged into the workspace's registry by `korrigans generate --check`.
+
+[todoist-sync]
+form = "skill"
+status = "active"
+origin = "todoist"
+summary = "Build and keep the household's Todoist project, with an owner for each delegated task."
+
+[todoist]
+form = "mcp"
+status = "active"
+origin = "https://github.com/Doist/todoist-ai"
+summary = "Official Todoist MCP server (OAuth)."

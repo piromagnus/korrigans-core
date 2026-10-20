@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Fake pi for tests: answers the short calls. The Watch gets a verdict that depends on FAKE_SCENARIO
+# (loop -> escalate, stop -> stop, else continue); the Constable gets "easy". Any other call succeeds.
+prompt=""
+for a in "$@"; do
+  case "$a" in *"Answer with a single JSON object:"*|*"Rate the difficulty of this task."*) prompt=$a;; esac
+done
+case "$prompt" in
+  *"Answer with a single JSON object:"*)
+    case "${FAKE_SCENARIO:-}" in
+      loop) echo '{"verdict": "escalate", "reason": "the same TypeError repeated", "advice": ""}';;
+      stop) echo 'Here it is: {"verdict": "stop", "reason": "writes outside its access", "advice": ""}';;
+      *) echo '{"verdict": "continue", "reason": "moving on", "advice": ""}';;
+    esac;;
+  *"Rate the difficulty of this task."*) echo "easy";;
+  *) echo "fake pi: work done";;
+esac
+exit 0

@@ -1,0 +1,101 @@
+# Registry of the core extensions. One table per extension. Modules register their own in
+# modules/<m>/extensions/registry.toml, and your workspace adds yours in extensions/registry.toml: the three
+# are merged (korrigans generate --check).
+# form: skill, script, mcp, plugin ; status: proposed, testing, active, refused ;
+# origin: core, a module name, internal (written in your workspace), or a URL (third-party: approved_by = "user").
+
+[create-resource]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Describe a dataset, repository or tool with observed paths, metadata and structure."
+
+[create-project-note]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Create or condense a project note; link resource notes instead of repeating technical detail."
+
+[maintain-resources]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Weekly and event-driven upkeep of resource notes and compact project links."
+
+[adjust-agent]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Rename an agent, change its personality or voice, add a role rule, create a Commander."
+
+[improve-system]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Propose, create or install an extension when a need keeps coming back."
+
+[capture-idea]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Turn an idea of the user into an idea note, never into a task."
+
+[delegate]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Write the charter of a task before handing it to a korrigan."
+
+[deposit-example]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Deposit a reusable result in resources/examples with a short README."
+
+[deliver]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Finish a task: evidence per criterion, card, status to-review."
+
+[ask-question]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Ask the user a request instead of inventing; block only when indispensable."
+
+[prepare-evidence-pack]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Prepare the evidence pack of a robust idea for the user to seal."
+
+[propagate-answers]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Carry the user's answers into memory, then close the requests."
+
+[propose-backlog]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Put forward backlog items that fit in quota left before a reset (quota module)."
+
+[morning-chronicle]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Write the dated, frozen Morning Chronicle in reports/."
+
+[round-table]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "Weekly review: lessons, at most three proposals, state of each commandery; the user decides."
+
+[vigil]
+form = "skill"
+status = "active"
+origin = "core"
+summary = "The Vigil: the welcome conversation that fills the household's context, one question at a time."

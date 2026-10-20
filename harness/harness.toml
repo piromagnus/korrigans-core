@@ -1,0 +1,89 @@
+# How to start each harness. The core (AGENTS.md, agents/, skills/, mcp/servers.toml) is neutral;
+# `korrigans generate` writes the files each harness needs, and `korrigans launch` / `korrigans run` use the
+# commands below. Override a harness in your workspace's harness/harness.toml.
+#
+# Placeholders: {prompt} = prompt text; {role_text} / {role_file} = assembled role (text or file path);
+# {workspace} = path of the workspace; {model} = model of the rank (rules/escalation.toml) for a task, or
+# from the role's category (standard, strong, fast) for generated subagents; {effort} = reasoning effort.
+#
+# subscription: the plan the harness runs on (shown in dry runs). Never pay-as-you-go by default.
+# interactive / resume / run: commands for a session, a resumed session and a non-interactive run.
+# models: model per category, for subagents and sessions.
+# quota_patterns: text in the output that means the quota is exhausted (next harness, same rank).
+# extra_dir_option: option that opens one more folder (access declared in the charter); without it, access
+#   is only given through the prompt. No harness guarantees read-only access.
+# reads_agents_md, skills: how the harness finds the Rule and the skills (information only).
+# verified = false: command taken from the harness documentation, not yet tried on your machine.
+
+[claude]
+subscription     = "Claude subscription"
+interactive      = ["claude", "--append-system-prompt", "{role_text}"]
+resume           = ["claude", "--continue", "--append-system-prompt", "{role_text}"]
+run              = ["claude", "-p", "{prompt}", "--permission-mode", "acceptEdits", "--model", "{model}", "--effort", "{effort}"]
+models           = { standard = "sonnet", strong = "opus", fast = "haiku" }
+quota_patterns   = ["usage limit", "limit reached"]
+extra_dir_option = "--add-dir"
+reads_agents_md  = "through CLAUDE.md (generated)"
+skills           = ".claude/skills -> .agents/skills (generated link)"
+verified         = false
+
+[codex]
+subscription     = "ChatGPT subscription"
+interactive      = ["codex", "{prompt}"]
+run              = ["codex", "exec", "--full-auto", "-m", "{model}", "-c", "model_reasoning_effort={effort}", "{prompt}"]
+models           = { standard = "gpt-6.1-sol", strong = "gpt-6.1-sol", fast = "gpt-6-luna" }
+quota_patterns   = ["usage limit", "rate limit"]
+extra_dir_option = "--add-dir"
+reads_agents_md  = "native"
+skills           = ".agents/skills (native)"
+verified         = false
+
+[pi]
+subscription     = "ChatGPT subscription (pi's openai-codex provider)"
+interactive      = ["pi", "--append-system-prompt", "{role_file}"]
+run              = ["pi", "--print", "--model", "{model}", "--thinking", "{effort}", "{prompt}"]
+models           = { standard = "openai-codex/gpt-6.1-sol", strong = "openai-codex/gpt-6.1-sol", fast = "openai-codex/gpt-6-luna" }
+quota_patterns   = ["usage limit", "rate limit"]
+reads_agents_md  = "native (AGENTS.md and CLAUDE.md)"
+skills           = ".agents/skills (native)"
+verified         = false
+
+[hermes]
+subscription     = "ChatGPT subscription or API key"
+interactive      = ["hermes", "chat", "--in", "{workspace}", "-q", "{prompt}"]
+run              = ["hermes", "chat", "--oneshot", "--in", "{workspace}", "--query-file", "{role_file}"]
+models           = { standard = "gpt-6.1-sol", strong = "gpt-6.1-sol", fast = "gpt-6-luna" }
+quota_patterns   = ["usage limit", "rate limit"]
+reads_agents_md  = "native (AGENTS.md merged from the git root to the current folder)"
+skills           = ".agents/skills (native, once the project is trusted)"
+verified         = false
+
+[cursor]
+subscription     = "Cursor subscription"
+interactive      = ["cursor-agent", "{prompt}"]
+run              = ["cursor-agent", "-p", "{prompt}"]
+models           = { standard = "auto", strong = "auto", fast = "auto" }
+quota_patterns   = ["usage limit"]
+reads_agents_md  = "native"
+skills           = "to check"
+verified         = false
+
+[vibe]
+subscription     = "Mistral Le Chat subscription"
+interactive      = ["vibe", "{prompt}"]
+run              = ["vibe", "--prompt", "{prompt}"]
+models           = { standard = "default", strong = "default", fast = "default" }
+quota_patterns   = ["usage limit", "rate limit"]
+reads_agents_md  = "to check"
+skills           = "to check"
+verified         = false
+
+[pi-durable]
+subscription     = "ChatGPT subscription (pi durable runtime)"
+interactive      = ["pi", "--append-system-prompt", "{role_file}"]
+run              = ["pi", "--print", "--model", "{model}", "--thinking", "{effort}", "{prompt}"]
+models           = { standard = "openai-codex/gpt-6.1-sol", strong = "openai-codex/gpt-6.1-sol", fast = "openai-codex/gpt-6-luna" }
+quota_patterns   = ["usage limit", "rate limit"]
+reads_agents_md  = "native (AGENTS.md and CLAUDE.md)"
+skills           = ".agents/skills (native)"
+verified         = true
